@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Digits of PI</title>
+
+    <style>
+        * {
+            margin: 0px;
+            padding: 20px;
+            outline: none;
+            color: #ffffff;
+            user-zoom: none;
+            user-select: none;
+            overflow-x: hidden;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            background-color: #000000;
+            font-family: "Roboto Mono", monospace;
+        }
+
+        .title {
+            top: 0;
+            font-size: 48px;
+            font-weight: normal;
+        }
+
+        .result {
+            overflow-wrap: break-word;
+        }
+
+        body::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        body::-webkit-scrollbar-thumb {
+            background-color: #ffffff;
+        }
+    </style>
+
+    <link rel=icon href="https://i.imgur.com/Xs4hjrl.png">
+    <link rel="apple-touch-icon" href="https://i.imgur.com/Xs4hjrl.png">
+</head>
+
+<body>
+    <h1 class="title">0 Digits of PI</h1>
+    <p class="result"></p>
+
+    <script>
+        let currentDigit = 0;
+
+        (async function () {
+            while (true) {
+                const {content} = await fetch(`https://api.pi.delivery/v1/pi?start=${currentDigit.toString()}&numberOfDigits=1000`).then(res => res.json())
+
+                for (let i = 0; i < content.length; i++) {
+                    document.querySelector(".title").innerText = `${currentDigit + i} Digits of PI`
+                    document.querySelector(".result").innerText += currentDigit === 0 && i === 0 ? "3." : content[i]
+
+                    await new Promise(resolve => setTimeout(resolve, 10))
+                }
+
+                currentDigit += 1000
+            }
+        })();
+    </script>
+</body>
+
+</html>
